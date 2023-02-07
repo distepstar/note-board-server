@@ -1,9 +1,8 @@
-import mongoose, { model, SchemaType } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import { TKanbanSection } from "../../consts/Kanban/types";
 
-const { Schema } = mongoose;
-
 export interface IKanbanData {
+  projectId: string;
   creator: string;
   assignedTo?: string;
   title: string;
@@ -15,6 +14,7 @@ export interface IKanbanData {
 }
 
 const kanbanDataSchema = new Schema<IKanbanData>({
+  projectId: {type: String, required: true},
   creator: { type: String, required: true },
   assignedTo: { type: String, required: false },
   title: { type: String, required: true },
@@ -24,6 +24,8 @@ const kanbanDataSchema = new Schema<IKanbanData>({
   section: { type: String, required: true },
   comment: { type: String, required: false },
 });
+
+
 
 
 // kanbanDataSchema.pre('save', function (next){

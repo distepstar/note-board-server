@@ -1,12 +1,21 @@
 import express, { Express } from "express";
-import * as cors from "cors";
-import dotenv from 'dotenv';
-import { connect, ConnectOptions } from "mongoose";
 import bodyParser from "body-parser";
+// cors
+import * as cors from "cors";
+// swagger
+import * as swaggerUI from "swagger-ui-express";
+import swaggerDocument from "../swagger.json"
+// dotenv
+import dotenv from 'dotenv';
+// mongoose
+import { connect, ConnectOptions } from "mongoose";
+// routers
 import { defaultRouter } from "../routes";
+// utils
 import { getCurrentDateTime } from "../utils/datetime";
+// controller 
 import { Kanban } from "../controllers/Kanban/index";
-
+import { KanbanProject } from "../controllers/KanbanProject";
 
 // mongoose
 const mongooseInit = async () => {
@@ -23,11 +32,13 @@ const mongooseInit = async () => {
 const globalInit = async (): Promise<{ app: Express, port: string | undefined, corsOptions: cors.CorsOptions }> => {
   // dotenv
   dotenv.config();
-
+  // app
   const app: Express = express();
   const port: string | undefined = process.env.PORT;
   // cors
-  const allowedOrigins = ["http://localhost:5173"];
+  const allowedOrigins = ["http://localhost:5173", "http://localhost:5510"];
+
+
   const corsOptions: cors.CorsOptions = {
     allowedHeaders: [
       "Origin",
@@ -50,18 +61,18 @@ const globalInit = async (): Promise<{ app: Express, port: string | undefined, c
     preflightContinue: false,
   }
 
-
-  await Promise.all([mongooseInit(), Kanban.initializeKanbanDataOnServerStart()]).catch((err) => console.error(`Mongoose database init error: ${err}`));
-
+  await Promise.all([mongooseInit(), Kanban.initializeKanbanDataOnServerStart(), KanbanProject.initialKanbanProjectOnStart()]).catch((err) => console.error(`Mongoose database init error: ${err}`));
   return { app, port, corsOptions };
 }
 
 export const main = async () => {
   const { app, port, corsOptions } = await globalInit();
+  // swagger
+  app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
   // cors settings
   app.use(cors.default(corsOptions));
   // body-parser
-  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   // default router
   app.use('/api', defaultRouter);

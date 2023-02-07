@@ -1,5 +1,6 @@
 import express, { Router, Request, Response, NextFunction } from "express";
 import { Kanban } from "../../controllers/Kanban";
+import { KanbanProject } from "../../controllers/KanbanProject";
 
 export const kanbanRouter: Router = Router();
 
@@ -9,8 +10,15 @@ kanbanRouter.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-kanbanRouter.get("/kanbanapi", Kanban.getAllKanbanData);
-kanbanRouter.get("/kanbanapi/:id", Kanban.getKanbanDataById);
-kanbanRouter.post("/kanbanapi/:id", Kanban.updateKanbanDataById);
+// get request
+// kanban data
+kanbanRouter.get("/kanbanapi/kanbandata", Kanban.getAllKanbanData);
+kanbanRouter.get("/kanbanapi/kanbandata/:id", Kanban.getKanbanDataById);
+kanbanRouter.get("/kanbanapi/kanbandata/project/:projectId", Kanban.getKanbanDataByProjectId);
+// kanban project
+kanbanRouter.get("/kanbanapi/kanbanproject", KanbanProject.getAllKanbanProject);
+// post request
+// kanban data
+kanbanRouter.post("/kanbanapi/kanbandata/:id", Kanban.updateKanbanDataById);
+// put request
 kanbanRouter.put("/kanbanapi/create");
-

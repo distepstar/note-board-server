@@ -1,10 +1,31 @@
 import { UpdateResult } from "mongodb";
 import { KanbanData, IKanbanData } from "../../models/Kanban";
+import { IKanbanProject, KanbanProjectModel } from "../../models/KanbanProject";
 import { IResponse } from "../../consts/Kanban/interfaces";
 
 export class KanbanService {
-  static async addToCollection(arr: IKanbanData[]) {
-    console.log("in scope")
+
+  // KanbanProject service
+  static async dropKanbanProjectCollectionOnStart(callback: (arr: IKanbanProject[]) => Promise<void>, arr: IKanbanProject[]) {
+    await KanbanProjectModel.deleteMany({}).catch(err => console.error(err));
+    await callback(arr);
+  }
+
+  static async addKanbanProjectToCollection(arr: IKanbanProject[]) {
+    arr.map(async (el) => {
+      let temp = new KanbanProjectModel(el);
+      await temp.save().catch(err => console.error(err));
+      console.log(temp.id);
+    })
+  }
+
+  static async getAllKanbanProject(): Promise<IKanbanProject[] | undefined> {
+    const doc = await KanbanProjectModel.find({}).catch(err => console.error(err));
+    return doc as IKanbanProject[];
+  }
+
+  // kanban data service
+  static async addKanbanDataToCollection(arr: IKanbanData[]) {
     arr.map(async (el) => {
       let temp = new KanbanData(el);
       await temp.save();
@@ -12,15 +33,19 @@ export class KanbanService {
     });
   }
 
-  static async dropCollectionOnStart(callback: (arr: IKanbanData[]) => Promise<void>, arr: IKanbanData[]) {
+  static async dropKanbanCollectionOnStart(callback: (arr: IKanbanData[]) => Promise<void>, arr: IKanbanData[]) {
     await KanbanData.deleteMany({}).catch(err => console.error(err));
     await callback(arr);
   }
 
-
   static async getAllKanbanData(): Promise<IKanbanData[] | undefined> {
     const doc = await KanbanData.find({}).catch(err => console.error(err));
     return doc as IKanbanData[];
+  }
+
+  static async getKanbanDataByProjectId(projectId: string): Promise<IKanbanData[] | undefined> {
+    const kanbanDataByProjectId: IKanbanData[] = await KanbanData.aggregate([{ $match: { projectId: projectId } }]);
+    return kanbanDataByProjectId as IKanbanData[];
   }
 
   static async getKanbanDataById(dataId: string): Promise<IKanbanData | null | undefined> {

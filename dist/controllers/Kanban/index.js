@@ -14,7 +14,8 @@ const Kanban_1 = require("../../services/Kanban");
 class Kanban {
     static initializeKanbanDataOnServerStart() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield Kanban_1.KanbanService.dropCollectionOnStart(Kanban_1.KanbanService.addToCollection, Kanban.kanbanDataDummy);
+            // can change to Promise.all
+            yield Kanban_1.KanbanService.dropKanbanCollectionOnStart(Kanban_1.KanbanService.addKanbanDataToCollection, Kanban.kanbanDataDummy);
         });
     }
     static getAllKanbanData(req, res) {
@@ -22,6 +23,13 @@ class Kanban {
             let doc = yield Kanban_1.KanbanService.getAllKanbanData();
             !doc && res.status(404).json("There is no kanban data!");
             res.json(doc);
+        });
+    }
+    static getKanbanDataByProjectId(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let temp = yield Kanban_1.KanbanService.getKanbanDataByProjectId(req.params.projectId);
+            !temp && res.status(404).json("There is no kanban data!");
+            res.json(temp);
         });
     }
     static getKanbanDataById(req, res) {
@@ -50,6 +58,7 @@ class Kanban {
 exports.Kanban = Kanban;
 Kanban.kanbanDataDummy = [
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -59,6 +68,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -68,6 +78,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -77,6 +88,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -86,6 +98,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -95,6 +108,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -104,6 +118,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -113,6 +128,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -122,6 +138,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -131,6 +148,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -140,6 +158,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -149,6 +168,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -158,6 +178,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -167,6 +188,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",
@@ -176,6 +198,7 @@ Kanban.kanbanDataDummy = [
         comment: "N/A",
     },
     {
+        projectId: "project-1",
         creator: "Louis",
         assignedTo: "",
         title: "Initialize Data",

@@ -37,13 +37,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
 const express_1 = __importDefault(require("express"));
-const cors = __importStar(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const mongoose_1 = require("mongoose");
 const body_parser_1 = __importDefault(require("body-parser"));
+// cors
+const cors = __importStar(require("cors"));
+// swagger
+const swaggerUI = __importStar(require("swagger-ui-express"));
+const swagger_json_1 = __importDefault(require("../swagger.json"));
+// dotenv
+const dotenv_1 = __importDefault(require("dotenv"));
+// mongoose
+const mongoose_1 = require("mongoose");
+// routers
 const routes_1 = require("../routes");
+// utils
 const datetime_1 = require("../utils/datetime");
+// controller 
 const index_1 = require("../controllers/Kanban/index");
+const KanbanProject_1 = require("../controllers/KanbanProject");
 // mongoose
 const mongooseInit = () => __awaiter(void 0, void 0, void 0, function* () {
     const options = {
@@ -56,10 +66,11 @@ const mongooseInit = () => __awaiter(void 0, void 0, void 0, function* () {
 const globalInit = () => __awaiter(void 0, void 0, void 0, function* () {
     // dotenv
     dotenv_1.default.config();
+    // app
     const app = (0, express_1.default)();
     const port = process.env.PORT;
     // cors
-    const allowedOrigins = ["http://localhost:5173"];
+    const allowedOrigins = ["http://localhost:5173", "http://localhost:5510"];
     const corsOptions = {
         allowedHeaders: [
             "Origin",
@@ -81,11 +92,13 @@ const globalInit = () => __awaiter(void 0, void 0, void 0, function* () {
         },
         preflightContinue: false,
     };
-    yield Promise.all([mongooseInit(), index_1.Kanban.initializeKanbanDataOnServerStart()]).catch((err) => console.error(`Mongoose database init error: ${err}`));
+    yield Promise.all([mongooseInit(), index_1.Kanban.initializeKanbanDataOnServerStart(), KanbanProject_1.KanbanProject.initialKanbanProjectOnStart()]).catch((err) => console.error(`Mongoose database init error: ${err}`));
     return { app, port, corsOptions };
 });
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const { app, port, corsOptions } = yield globalInit();
+    // swagger
+    app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swagger_json_1.default));
     // cors settings
     app.use(cors.default(corsOptions));
     // body-parser

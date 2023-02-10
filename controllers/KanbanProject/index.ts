@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { IKanbanProject } from "../../models/KanbanProject";
-import { KanbanService } from "../../services/Kanban"
+import KanbanProjectService from "../../services/KanbanProject"
 
 
 
@@ -37,11 +37,11 @@ export class KanbanProject {
   ];
 
   static async initialKanbanProjectOnStart() {
-    await KanbanService.dropKanbanProjectCollectionOnStart(KanbanService.addKanbanProjectToCollection, this.kanbanProjects);
+    await KanbanProjectService.dropKanbanProjectCollectionOnStart(KanbanProjectService.addKanbanProjectToCollection, this.kanbanProjects);
   }
 
   static async getAllKanbanProject(req: Request, res: Response) {
-    const temp = await KanbanService.getAllKanbanProject();
+    const temp = await KanbanProjectService.getAllKanbanProject();
     !temp && res.status(200).json({ status: 200, message: "Kanban board has no project, please create one!" });
     res.json(temp);
   }

@@ -39,6 +39,22 @@ class Kanban {
             res.json(kanbanData);
         });
     }
+    static createKanbanData(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let data = req.body || null;
+            if (data === null || data === undefined) {
+                res.status(400).json("Kanban data is not valid or empty");
+            }
+            else {
+                const createRes = yield Kanban_1.KanbanService.createKanbanData(JSON.stringify(data));
+                console.log(createRes);
+                res.status(createRes.status).json({
+                    message: createRes.message,
+                    error: createRes.error
+                });
+            }
+        });
+    }
     static updateKanbanDataById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id || null;

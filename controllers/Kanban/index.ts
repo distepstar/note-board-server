@@ -179,6 +179,23 @@ export class Kanban {
     res.json(kanbanData);
   }
 
+  static async createKanbanData(req: Request, res: Response) {
+    let data = req.body || null;
+
+    if (data === null || data === undefined) {
+      res.status(400).json("Kanban data is not valid or empty");
+    } else {
+      const createRes: IResponse = await KanbanService.createKanbanData(JSON.stringify(data));
+
+      console.log(createRes);
+
+      res.status(createRes.status).json({
+        message: createRes.message,
+        error: createRes.error
+      });
+    }
+  }
+
   static async updateKanbanDataById(req: Request, res: Response) {
     const id = req.params.id || null
     if (id === null || id === undefined) {

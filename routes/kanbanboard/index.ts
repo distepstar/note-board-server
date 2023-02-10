@@ -19,6 +19,6 @@ kanbanRouter.get("/kanbanapi/kanbandata/project/:projectId", Kanban.getKanbanDat
 kanbanRouter.get("/kanbanapi/kanbanproject", KanbanProject.getAllKanbanProject);
 // post request
 // kanban data
-kanbanRouter.post("/kanbanapi/kanbandata/:id", Kanban.updateKanbanDataById);
+kanbanRouter.post("/kanbanapi/kanbandata/create", Kanban.createKanbanData);
 // put request
-kanbanRouter.put("/kanbanapi/create");
+kanbanRouter.put("/kanbanapi/kanbandata/:id", Kanban.updateKanbanDataById);

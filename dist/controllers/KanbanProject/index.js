@@ -8,18 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KanbanProject = void 0;
-const Kanban_1 = require("../../services/Kanban");
+const KanbanProject_1 = __importDefault(require("../../services/KanbanProject"));
 class KanbanProject {
     static initialKanbanProjectOnStart() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield Kanban_1.KanbanService.dropKanbanProjectCollectionOnStart(Kanban_1.KanbanService.addKanbanProjectToCollection, this.kanbanProjects);
+            yield KanbanProject_1.default.dropKanbanProjectCollectionOnStart(KanbanProject_1.default.addKanbanProjectToCollection, this.kanbanProjects);
         });
     }
     static getAllKanbanProject(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const temp = yield Kanban_1.KanbanService.getAllKanbanProject();
+            const temp = yield KanbanProject_1.default.getAllKanbanProject();
             !temp && res.status(200).json({ status: 200, message: "Kanban board has no project, please create one!" });
             res.json(temp);
         });

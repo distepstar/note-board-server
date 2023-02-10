@@ -20,15 +20,15 @@
   ],
   "tags": [
     {
-      "name": "developers",
-      "description": "Operations available to regular developers"
+      "name": "kanbanapi",
+      "description": "An API for handling all kanbanboard operations."
     }
   ],
   "paths": {
     "/api/kanbanboard/kanbanapi/kanbandata": {
       "get": {
         "tags": [
-          "developers"
+          "kanbanapi"
         ],
         "summary": "get all kanban data in kanbanboard",
         "description": "Get all the kanban data from any project\n",
@@ -53,10 +53,46 @@
         }
       }
     },
+    "/api/kanbanboard/kanbanapi/kanbandata/create": {
+      "post": {
+        "tags": [
+          "kanbanapi"
+        ],
+        "summary": "create new kanban data",
+        "description": "Create a new single kanban data to collection\n",
+        "operationId": "creatKanbanData",
+        "requestBody": {
+          "description": "Data that matches KanbanData Schema is required\n",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KanbanData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "kanban data create successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KanbanData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          }
+        }
+      }
+    },
     "/api/kanbanboard/kanbanapi/kanbandata/{id}": {
       "get": {
         "tags": [
-          "developers"
+          "kanbanapi"
         ],
         "summary": "get kanban data by id",
         "description": "Get kanban data according to its id\n",
@@ -90,9 +126,9 @@
           }
         }
       },
-      "post": {
+      "put": {
         "tags": [
-          "developers"
+          "kanbanapi"
         ],
         "summary": "update kanban data by its id",
         "description": "Update the current exist kanban data by its id",
@@ -122,7 +158,14 @@
         },
         "responses": {
           "201": {
-            "description": "kanban data updated!"
+            "description": "kanban data updated!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KanbanDataResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "invalid input, object invalid"
@@ -133,7 +176,7 @@
     "/api/kanbanboard/kanbanapi/kanbandata/project/{projectId}": {
       "get": {
         "tags": [
-          "developers"
+          "kanbanapi"
         ],
         "summary": "get kanban data by projectId",
         "description": "Get kanban data according to its projectId\n",
@@ -166,7 +209,7 @@
             }
           },
           "400": {
-            "description": "bad input parameter"
+            "description": "bad request"
           }
         }
       }
@@ -174,7 +217,7 @@
     "/api/kanbanboard/kanbanapi/kanbanproject": {
       "get": {
         "tags": [
-          "developers"
+          "kanbanapi"
         ],
         "summary": "get all kanban project",
         "description": "Get kanban project that created by user\n",
@@ -202,6 +245,24 @@
   },
   "components": {
     "schemas": {
+      "KanbanDataResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "data create successfully!"
+          },
+          "error": {
+            "type": "string",
+            "example": "Unexpected error ........."
+          }
+        }
+      },
       "KanbanData": {
         "required": [
           "creator",
@@ -244,7 +305,7 @@
           },
           "section": {
             "type": "string",
-            "example": "TODO"
+            "example": "TO DO"
           },
           "comment": {
             "type": "string",
